@@ -1,0 +1,26 @@
+----------Books---------------
+Struts Theory book
+Struts practice examples book
+--------------------------
+----------Topics------------
+StrutsHelloWorld Example
+Action Form Validation overriding validate() method
+ActionForm validation using declarative validation
+DynaActionForm
+DynaValidatorForm
+ValidWhen
+Action form reset
+IncludeAction
+ForwardAction
+DispatchAction
+MappingDispatchAction
+LookupDispatchAction
+SwitchAction
+I18N
+Datasource
+FileUpload
+Display - display:table - to iterate the list and display in tabular format
+Exception Handler
+SaveToken
+Tiles
+CustomValidatorImplementation
