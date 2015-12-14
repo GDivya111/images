@@ -1,0 +1,48 @@
+------Starting Jenkins-------
+Using jnlp file - using java web start - javaws
+Using war - 
+	deploying war into tomcat
+	executing jar file - java -jar jenkins.jar
+-----------------------------
+SCM - Source Code Management - SVN, CVS, Github
+Build tools - Ant, Maven
+Other tools - batch, shell
+-----------------------------
+Executing ant builds without SCM(Source Code Management) using batch
+Executing ant builds without SCM(Source Code Management) using build.xml
+Executing maven builds without SCM(Source Code Management) using batch
+Executing maven builds without SCM(Source Code Management) using pom.xml
+Executing ant builds with Github using build.xml
+Executing maven builds with Github using pom.xml
+Executing ant builds with SVN using build.xml
+Executing maven builds with SVN using pom.xml
+-------------------------------------------
+-----Executing maven builds with Github using pom.xml--------
+1. Git binaries installation
+2. Jenkins Installation
+3. Jenkins Github plugin installation
+4. Jenkins, Maven and Git configuration
+5. Testing the configuration with Github maven project
+--Jenkins Github plugin installation
+open jenkins(http://localhost:8080/jenkins) -> Manage Jenkins -> Manage Plugins -> Available -> enter github in Filter field ->
+	Select "GitHub plugin" -> click "Download now and install after restart" -> wait until add plugins are downloaded -> restart the server
+-----------
+--Jenkins, Mave, Git configuration
+open jenkins (http://localhost:8080/jenkins) -> Manage Jenkins -> Cofigure System -> in JDK section click "Add JDK" button -> uncheck "Install automatically ->
+	Enter JDK name (Ex: localJDK) -> enter "JAVA_HOME" value -> In the Git section click "Git Installations" button -> Enter Name (Ex: localGIT) ->
+	Enter "Path to Git executable" as git.exe (we can give git.exe because git/bin added to path environment variable) -> 
+	In the Ant section click "Add Ant" button -> uncheck "Install automatically" option -> Enter "Ant Name" (Ex: localAnt) -> 
+	Enter "ANT_HOME" to the ant installation -> In the Maven section click "add MAven" button -> uncheck "Install automatically" option ->
+	Enter Maven Name (Ex: localMaven) -> Enter MAVEN_HOME -> click "Apply" -> click "Save".
+----------
+--Testing the configuration with Github maven project
+login to Github -> open maven project you want to build -> copy HTTPS url -> Go to Jenkins -> click "New Job" link -> 
+	Enter "Item Name" (Ex: Jenkins-Git-Maven) -> select "Freestyle project" -> click Ok -> Enter "Description" if you want ->
+	In the source code management section select "Git" -> Enter "Repository URL" copied above -> Enter "Credentials" if you want ->
+	In the Build section -> select "Invoke top-level Maven targets" -> Enter the goal (Ex: package) -> click "Advanced" -> 
+	enter "POM" (directory where pom.xml is located) (Ex: SpringJSFHibernateMaven\pom.xml) -> click "Apply" -> click "Save" ->
+	Go to jenkins home page -> Schedule a build -> Build should be successfull
+---------------------------------------------------------------
+------Executing ant builds with Github using build.xml---------
+Add new Job and set as above
+---------------------------------------------------------------
