@@ -21,4 +21,4 @@ Help: -verbose:class, ClassLoader.getResource()
 how to get heap dump on out of memory error: 
 1. -XX:+HeapDumpOnOutOfMemoryError
 	right click on class -> Run As -> Run Configurations -> Arguments -> add above value in VM arguments:
-2. Another way to see heap dump in eclipse -> Eclipse memory analyzer
+2. Another way to see heap dump in eclipse -> Eclipse memory analyzer tool
