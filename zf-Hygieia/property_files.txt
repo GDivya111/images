@@ -1,0 +1,97 @@
+# dashboard.properties
+dbname=dashboard
+dbusername=admin
+dbpassword=admin
+dbhost=127.0.0.1
+dbport=27017
+#server.contextPath=/api
+server.port=8085
+
+
+
+------------  github application properties ---------------------------------------
+
+#Database Name 
+spring.data.mongodb.database=dashboard
+
+#Database HostName - default is localhost
+spring.data.mongodb.host=127.0.0.1
+
+#Database Port - default is 27017
+spring.data.mongodb.port=27017
+
+#Database Username - default is blank
+spring.data.mongodb.username=admin
+
+#Database Password - default is blank
+spring.data.mongodb.password=admin
+
+#Collector schedule (required)
+github.cron=0 0/5 * * * *
+
+github.host=github.com/brldevops/spring-petclinic.git
+
+#Maximum number of days to go back in time when fetching commits
+github.commitThresholdDays=15
+
+
+-----------------------------------jenkins application properties -------------------------------------------------
+
+#Database Name - default is test
+spring.data.mongodb.database=dashboard
+
+#Database HostName - default is localhost
+spring.data.mongodb.host=127.0.0.1
+
+#Database Port - default is 27017
+spring.data.mongodb.port=27017
+
+#Database Username - default is blank
+spring.data.mongodb.username=admin
+
+#Database Password - default is blank
+spring.data.mongodb.password=admin
+
+#Collector schedule (required)
+jenkins.cron=0 0/5 * * * *
+
+#Jenkins server (required) - Can provide multiple
+jenkins.servers[0]=http://172.16.79.60:8081
+
+#If using username/token for api authentication (required for Cloudbees Jenkins Ops Center) see sample
+#jenkins.servers[1]=http://username:token@jenkins.company.com
+
+#Another option: If using same username/password Jenkins auth - set username/apiKey to use HTTP Basic Auth (blank=no auth)
+jenkins.username=javed.khan
+jenkins.apiKey=brillio#@!
+
+#Determines if build console log is collected - defaults to false
+jenkins.saveLog=true
+
+
+-----------------------------------Sonar application properties --------------------------------------------------------------
+
+#Database Name 
+spring.data.mongodb.database=dashboard
+
+#Database HostName - default is localhost
+spring.data.mongodb.host=127.0.0.1
+
+#Database Port - default is 27017
+spring.data.mongodb.port=27017
+
+#Database Username - default is blank
+spring.data.mongodb.username=admin
+
+#Database Password - default is blank
+spring.data.mongodb.password=admin
+
+#Collector schedule (required)
+sonar.cron=0 0/5 * * * *
+
+#Sonar server(s) (required) - Can provide multiple
+sonar.servers[0]=http://172.16.79.60:9000
+
+#Sonar Metrics
+sonar.metrics=ncloc,line_coverage,violations,critical_violations,major_violations,blocker_violations,sqale_index,test_success_density,test_failures,test_errors,tests
+

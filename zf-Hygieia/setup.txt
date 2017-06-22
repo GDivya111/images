@@ -1,0 +1,28 @@
+Build the entire application from root
+change to directory D:\Hygieia-master
+
+1. execute the following mvn clean install package (only once is enough)
+
+2. Run mongodb -> mongod
+
+3.change to directory D:\Hygieia-master\api
+execute java -jar target\api.jar --spring.config.name=api --spring.config.location=dashboard.properties
+api monitoring starts
+
+4.change to directory D:\Hygieia-master\UI
+execute gulp serve
+hygieia login page opens at localhost:3000
+
+change to directory D:\Hygieia-master\github-scm-collector
+execute java -jar target\github-scm-collector-1.5.0-SNAPSHOT.jar --spring.config.name=application --spring.config.location=application.properties
+git scm collector monitoring starts
+
+change to directory D:\Hygieia-master\jenkins-build-collector
+execute java -jar target\jenkins-build-collector-1.5.0-SNAPSHOT.jar --spring.config.name=application --spring.config.location=application.properties
+jenkins collector starts
+
+change to directory D:\Hygieia-master\sonar-codequality-collector
+execute java -jar target\sonar-codequality-collector-1.5.0-SNAPSHOT.jar --spring.config.name=application --spring.config.location=application.properties
+Sonarqube collector starts
+
+Signup on localhost:3000
