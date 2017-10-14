@@ -1,0 +1,138 @@
+buildscript {
+ext {
+springBootVersion = '1.5.3.RELEASE'
+}
+
+repositories {
+maven { url 'http://nexus.thermofisher.com/nexus/content/repositories/central/' }
+maven { url 'http://nexus.thermofisher.com/nexus/content/repositories/tfs/' }
+maven { url 'http://nexus.thermofisher.com/nexus/content/repositories/gradle-plugins/' }
+}
+
+dependencies {
+classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+classpath "io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE"
+classpath "com.tfs.gradle.plugins:tfs-spring-boot-startup-conf:0.3.1"
+classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
+}
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+apply plugin: 'org.springframework.boot'
+apply plugin: "io.spring.dependency-management"
+apply plugin: "tfs-spring-boot-startup-conf"
+apply plugin: "com.gorylenko.gradle-git-properties"
+
+startup {
+javaOpts = '-Xmx1024m'
+}
+jar {
+baseName = 'tfcom-catalog-data-source'
+}
+springBoot {
+executable = true
+}
+bootRun {
+systemProperty 'spring.profiles.active', 'local'
+systemProperty 'spring.cloud.config.label', 'dev'
+jvmArgs = ['-Xmx1024m']
+}
+sourceCompatibility = 1.8
+
+repositories {
+maven { url 'http://nexus.thermofisher.com/nexus/content/repositories/central/' }
+maven { url 'http://nexus.thermofisher.com/nexus/content/repositories/thirdparty/' }
+}
+
+
+dependencies {
+compile "org.springframework.boot:spring-boot-starter-web"
+compile "org.springframework.boot:spring-boot-starter-actuator"
+// spring cloud
+compile "org.springframework.cloud:spring-cloud-starter-eureka"
+
+compile "org.springframework.cloud:spring-cloud-starter-ribbon"
+compile "org.springframework.cloud:spring-cloud-starter-zuul"
+compile "org.springframework.cloud:spring-cloud-config-client"
+
+// lombok for code generation
+compile "org.projectlombok:lombok:1.16.10"
+compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
+compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+
+// allows JSON processing without needing to use @JsonProperty
+// https://github.com/FasterXML/jackson-module-parameter-names
+compile "com.fasterxml.jackson.module:jackson-module-parameter-names"
+//spring cloud dataflow
+
+compile "org.springframework.integration:spring-integration-file"
+compile "org.springframework.integration:spring-integration-java-dsl"
+compile "org.springframework.cloud.stream.app:app-starters-trigger-common:1.2.0.RELEASE"
+compile "org.springframework.cloud.stream.app:app-starters-trigger-unlimited-common:1.2.0.RELEASE"
+
+compile "org.springframework.cloud:spring-cloud-stream"
+compile "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+//compile "org.springframework.boot:spring-boot-starter-batch"
+compile "org.beanio:beanio:2.1.0"
+
+//compile('org.springframework.cloud:spring-cloud-stream-binder-kafka')
+testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+imports {
+mavenBom "org.springframework.cloud:spring-cloud-starter-parent:Dalston.SR1"
+}
+}
+compileJava {
+// set to allow Jackson to use parameter names for JSON processing
+options.compilerArgs << '-parameters'
+}
+
+eclipse {
+jdt {
+javaRuntimeName = "JavaSE-1.8"
+}
+}
+
+import org.gradle.internal.os.OperatingSystem
+
+if (OperatingSystem.current().isWindows()) {
+task pathingJar(type: Jar) {
+dependsOn configurations.runtime
+appendix = 'pathing'
+
+doFirst {
+manifest {
+// Build the Class-Path for absolute paths based on runtime dependencies.
+attributes "Class-Path": configurations.runtime.files.collect {
+it.toURL().toString().replaceFirst(/file:\/+/, '/')
+}.join(' ')
+}
+}
+
+// assetCompile will be execute for all Jar-type tasks
+// (see https://github.com/bertramdev/asset-pipeline/blob/master/asset-pipeline-gradle/src/main/groovy/asset/pipeline/gradle/AssetPipelinePlugin.groovy#L85)
+// at least exclude the assets from pathing jar
+exclude { it.file.absolutePath.contains('assetCompile') }
+}
+
+// This gradle task will be called by 'grails run-app'.
+bootRun {
+dependsOn pathingJar
+doFirst {
+// Add the compiled app classed to the classpath of the pathing jar. Probably there is a gradle variable for them?
+classpath = files("$buildDir/classes/main", "$buildDir/resources/main", "$projectDir/gsp-classes", pathingJar.archivePath)
+}
+}
+
+}
+
+task wrapper(type: Wrapper) {
+gradleVersion = '3.2.1'
+distributionUrl = "http://nexus.thermofisher.com/nexus/content/repositories/gradle/gradle-$gradleVersion-all.zip"
+}
